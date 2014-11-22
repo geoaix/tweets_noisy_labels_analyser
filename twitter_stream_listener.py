@@ -16,11 +16,10 @@ class TwitterStreamListener(StreamListener):
             tweet = loads(raw_data)
             tweet_text = tweet['text']
 
-            if not self.is_retweet(tweet_text):
-                with open(self.file_path, 'a') as df:
-                    df.write(dumps(tweet_text.encode('utf8')) + '\n')
-                    self.tweets_count += 1
-                    print self.tweets_count
+            with open(self.file_path, 'a') as df:
+                df.write(dumps(tweet_text.encode('utf8')) + '\n')
+                self.tweets_count += 1
+                print self.tweets_count
 
             if self.should_stop():
                 return False
@@ -33,7 +32,3 @@ class TwitterStreamListener(StreamListener):
 
     def should_stop(self):
         return self.tweets_count == self.limit
-
-    @staticmethod
-    def is_retweet(tweet_text):
-        return tweet_text.startswith('RT')
